@@ -43,7 +43,7 @@ Navigate to [swagger/index.html](http://localhost:5000/swagger/index.html) to us
 - Time spent on travel with the speed of light is ignored, holiday assumed to end precisely at the beginning on the day after
 
 Main application architecture ideas:
-- Use classic layered architecture and separating related layer classes into entities, business-objects and DTOs
+- Use classic layered architecture and abstracting data access using interfaces
 - Use language-ext to promote more declarative and type-safe style, especially avoiding `null`s
 - Additional industry-standard libraries were used: Autofac as IoC-container and Serilog to manage logging 
 - Using cache to reduce load on external APIs
