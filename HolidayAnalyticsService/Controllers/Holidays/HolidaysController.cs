@@ -23,7 +23,7 @@ namespace HolidayAnalyticsService.Controllers.Holidays
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Task<IActionResult> LongestSequence([FromQuery] LongestSequenceModel model) =>
-            _calculation.CalculateLongestSequence(model.Year, model.Countries).Match(Ok, MatchError);
+            _calculation.GetLongestSequence(model.Year, model.Countries).Match(Ok, MatchError);
 
         private IActionResult MatchError(IBusinessError error) => error switch
         {

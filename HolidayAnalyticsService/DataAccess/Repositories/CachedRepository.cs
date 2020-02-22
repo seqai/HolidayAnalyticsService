@@ -36,17 +36,8 @@ namespace HolidayAnalyticsService.DataAccess.Repositories
             _logger = logger;
         }
 
-        public TryOptionAsync<T> GetByIdAsync(TId id) => async () =>
-        {
-            var cached = GetFromCache(id);
-            var cachedResult = await cached.Try();
-            if (cachedResult.IsFaultedOrNone)
-            {
-                return await _repository.GetByIdAsync(id).Do(async x => await Cache(id, x)).Try();
-            }
-
-            return cachedResult;
-        };
+        public TryOptionAsync<T> GetByIdAsync(TId id) => 
+            GetFromCache(id).Plus(_repository.GetByIdAsync(id).Do(async x => await Cache(id, x)));
 
         public TryAsync<IEnumerable<T>> GetByIdsAsync(IEnumerable<TId> ids) => async () =>
         {
