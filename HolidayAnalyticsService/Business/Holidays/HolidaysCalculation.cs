@@ -87,7 +87,7 @@ namespace HolidayAnalyticsService.Business.Holidays
         public static ImmutableList<TimeZoneInfo> GenerateTimezones(IEnumerable<string> offsets) =>
             offsets.Map(StringToOffset).Somes().Map(offset => TimeZoneInfo.CreateCustomTimeZone(
                 offset.code,
-                new TimeSpan(offset.hours, offset.minutes, 0),
+                new TimeSpan(offset.hours, offset.minutes * Math.Sign(offset.hours), 0),
                 offset.code,
                 offset.code
             )).ToImmutableList();

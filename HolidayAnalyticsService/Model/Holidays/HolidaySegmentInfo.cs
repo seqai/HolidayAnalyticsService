@@ -12,7 +12,7 @@ namespace HolidayAnalyticsService.Model.Holidays
         }
         public int Total => Segments.Count;
         public DateTimeOffset Start => Segments.Select(x => x.Start).FirstOrDefault();
-        public DateTimeOffset End => Segments.Select(x => x.End).FirstOrDefault();
+        public DateTimeOffset End => Segments.Select(x => x.End).LastOrDefault();
         public DateTimeOffset StartUtc => Start.UtcDateTime;
         public DateTimeOffset EndUtc => End.UtcDateTime;
 

@@ -17,7 +17,7 @@ namespace HolidayAnalyticsService.DataAccess.Repositories
         private readonly IDistributedCache _cache;
         private readonly Func<TId, string> _keyFunc;
         private readonly Func<T, TId> _idFunc;
-        private double _expiration;
+        private readonly double _expiration;
         private readonly ILogger _logger;
 
         public CachedRepository(
