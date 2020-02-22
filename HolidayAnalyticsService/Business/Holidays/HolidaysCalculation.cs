@@ -51,7 +51,7 @@ namespace HolidayAnalyticsService.Business.Holidays
                     start = segment.Start;
                     end = segment.End;
                 }
-                else
+                else if (segment.End > end)
                 {
                     currentSegments.Add(segment);
                     end = segment.End;
@@ -75,14 +75,14 @@ namespace HolidayAnalyticsService.Business.Holidays
             return optimizedSegments;
         }
 
-        public static IEnumerable<HolidaySegment> CreateSegments(Holiday holiday, ImmutableList<TimeZoneInfo> tzs)
-        {
-            return tzs.Map(tz => new HolidaySegment(
-                new DateTimeOffset(holiday.Date.DateTime, tz.BaseUtcOffset),     
-                new DateTimeOffset(holiday.Date.DateTime, tz.BaseUtcOffset).AddDays(1),     
-                holiday
-            ));
-        }
+        public static IEnumerable<HolidaySegment> CreateSegments(Holiday holiday, ImmutableList<TimeZoneInfo> tzs) =>
+            tzs.Map(tz =>
+            {
+                var start = new DateTimeOffset(holiday.Date.DateTime, tz.BaseUtcOffset);
+                // Assuming that consecutive dates are ok
+                var end = start.AddDays(1);
+                return new HolidaySegment(start, end, holiday, tz.DisplayName);
+            });
 
         public static ImmutableList<TimeZoneInfo> GenerateTimezones(IEnumerable<string> offsets) =>
             offsets.Map(StringToOffset).Somes().Map(offset => TimeZoneInfo.CreateCustomTimeZone(

@@ -27,5 +27,7 @@ namespace HolidayAnalyticsService.Controllers.Holidays
             get => _countries?.Count > 0 ? _countries : new List<string>(DefaultCountries);
             set => _countries = value;
         }
+
+        [FromQuery] public bool Optimize { get; set; } = true;
     }
 }

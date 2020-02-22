@@ -32,11 +32,11 @@ namespace HolidayAnalyticsService.Business.Holidays
             _logger = logger;
         }
 
-        public EitherAsync<IBusinessError, IReadOnlyCollection<HolidaySegment>> GetLongestSequence(int year,
-            IEnumerable<string> countryCodes) =>
-            GetLongestSequence(CreateHolidayInfo(year, countryCodes).ToImmutableList());
+        public EitherAsync<IBusinessError, HolidaySegmentInfo> GetLongestSequence(int year,
+            IEnumerable<string> countryCodes, bool optimize) =>
+            GetLongestSequence(CreateHolidayInfo(year, countryCodes).ToImmutableList(), optimize);
 
-        private EitherAsync<IBusinessError, IReadOnlyCollection<HolidaySegment>> GetLongestSequence(IImmutableList<HolidayInfoId> ids)
+        private EitherAsync<IBusinessError, HolidaySegmentInfo> GetLongestSequence(IImmutableList<HolidayInfoId> ids, bool optimize)
         {
             var holidaysTask = GetHolidayInfo(ids);
             var countriesTask = GetCountries(ids);
@@ -44,9 +44,9 @@ namespace HolidayAnalyticsService.Business.Holidays
             var segments =
                 from holidays in holidaysTask
                 from countries in countriesTask
-                select CalculateLongestSequence(holidays, countries);
+                select CalculateLongestSequence(holidays, countries, optimize);
 
-            return segments;
+            return segments.Map(x => new HolidaySegmentInfo(x.ToImmutableList()));
         }
 
 

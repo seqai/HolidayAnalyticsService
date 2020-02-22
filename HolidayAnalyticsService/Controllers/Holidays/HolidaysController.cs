@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using HolidayAnalyticsService.Business.Errors;
 using HolidayAnalyticsService.Business.Holidays;
+using HolidayAnalyticsService.Model.Holidays;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,10 +21,10 @@ namespace HolidayAnalyticsService.Controllers.Holidays
 
         [HttpGet]
         [Route("longest-sequence/{Year}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HolidaySegmentInfo), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Task<IActionResult> LongestSequence([FromQuery] LongestSequenceModel model) =>
-            _calculation.GetLongestSequence(model.Year, model.Countries).Match(Ok, MatchError);
+            _calculation.GetLongestSequence(model.Year, model.Countries, model.Optimize).Match(Ok, MatchError);
 
         private IActionResult MatchError(IBusinessError error) => error switch
         {
